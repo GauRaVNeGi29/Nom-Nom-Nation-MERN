@@ -1,30 +1,164 @@
-import React, {useContext} from 'react'
+import React, {useState, useContext} from 'react'
 import './PlaceOrder.css'
 import { StoreContext } from '../../context/StoreContext'
+import axios from 'axios'
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (document.getElementById('razorpay-script')) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'razorpay-script';
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => {
+      resolve(true);
+    };
+    script.onerror = () => {
+      resolve(false);
+    };
+    document.body.appendChild(script);
+  });
+};
 
 const PlaceOrder = () => {
 
-  const {getTotalCartAmount} = useContext(StoreContext);
+  const {getTotalCartAmount,token,food_list,cartItems,url,frontendUrl} = useContext(StoreContext);
+
+  const [data,setData] = useState({
+    firstName:"",
+    lastName:"",
+    email:"",
+    street:"",
+    city:"",
+    state:"",
+    pincode:"",
+    country:"",
+    phone:""
+  })
+
+  // const loadRazorpayScript = () => {
+  //   return new Promise((resolve) => {
+  //     const script = document.createElement("script");
+  //     script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  //     script.onload = () => {
+  //       resolve(true);
+  //     };
+  //     script.onerror = () => {
+  //       resolve(false);
+  //     };
+  //     document.body.appendChild(script);
+  //   });
+  // };
+
+  const placeOrder = async (e) => {
+    e.preventDefault();
+
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
+
+    let orderItems = [];
+    food_list.forEach(item => {
+      if (cartItems[item._id] > 0) {
+        orderItems.push({
+          _id: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: cartItems[item._id],
+        });
+      }
+    });
+
+    const orderData = {
+      address: data,
+      items: orderItems,
+      amount: getTotalCartAmount() + 2,
+    };
+
+    try {
+      const response = await axios.post(url + "/api/order/place", orderData, {
+        headers: { token }
+      });
+
+      if (response.data.success) {
+        const { razorpayOrderId, amount, currency, key, orderId } = response.data;
+
+        const options = {
+          key, // Razorpay key from backend
+          amount, // amount in paise
+          currency,
+          name: "Nom Nom Nation",
+          description: "Test Transaction",
+          order_id: razorpayOrderId,
+          handler: async function (response) {
+            window.location.href = `${frontendUrl}/verify?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&orderId=${orderId}`;          },
+          prefill: {
+            name: data.firstName + " " + data.lastName,
+            email: data.email,
+            contact: data.phone
+          },
+          notes: {
+            address: `${data.street}, ${data.city}, ${data.state}, ${data.pincode}, ${data.country}`
+          },
+          theme: {
+            color: "#3399cc"
+          }
+        };
+        
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+        
+      } else {
+        window.location.href = `${frontendUrl}/verify?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&orderId=${orderId}`;      }
+    } catch (error) {
+      console.error(error);
+      alert("Error");
+    }
+  };
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(!token){
+      navigate("/cart");
+    }
+    else if(getTotalCartAmount()===0){
+      navigate("/cart");
+    }
+  },[token])
+
+
+  const onChangeHandler = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setData(data=>({...data,[name]:value}));
+  }
 
   return (
-    <form className='place-order'>
+    <form onSubmit={placeOrder} className='place-order'>
       <div className="place-order-left">
         <p className="title">Delivery Information</p>
         <div className="multi-fields">
-          <input type="text" placeholder='First name'/>
-          <input type="text" placeholder='Last name'/>
+          <input required onChange={onChangeHandler} name='firstName' value={data.firstName} type="text" placeholder='First name'/>
+          <input required onChange={onChangeHandler} name='lastName' value={data.lastName} type="text" placeholder='Last name'/>
         </div>
-        <input type="text" placeholder='Email address'/>
-        <input type="text" placeholder='Street'/>
+        <input required onChange={onChangeHandler} name='email' value={data.email} type="text" placeholder='Email address'/>
+        <input required onChange={onChangeHandler} name='street' value={data.street} type="text" placeholder='Street'/>
         <div className="multi-fields">
-          <input type="text" placeholder='City'/>
-          <input type="text" placeholder='State'/>
+          <input required onChange={onChangeHandler} name='city' value={data.city} type="text" placeholder='City'/>
+          <input required onChange={onChangeHandler} name='state' value={data.state} type="text" placeholder='State'/>
         </div>
         <div className="multi-fields">
-          <input type="text" placeholder='Pin code'/>
-          <input type="text" placeholder='Country'/>
+          <input required onChange={onChangeHandler} name='pincode' value={data.pincode} type="text" placeholder='Pin code'/>
+          <input required onChange={onChangeHandler} name='country' value={data.country} type="text" placeholder='Country'/>
         </div>
-        <input type="text" placeholder='Phone'/>
+        <input required onChange={onChangeHandler} name='phone' value={data.phone} type="text" placeholder='Phone'/>
       </div>
       <div className="place-order-right">
         <div className="cart-total">
@@ -45,7 +179,7 @@ const PlaceOrder = () => {
                 <p>${getTotalCartAmount()===0?0:getTotalCartAmount()+2}</p>
               </div>
             </div>
-            <button>Proceed to Payment</button>
+            <button type='submit'>Proceed to Payment</button>
           </div>
       </div>
     </form>
