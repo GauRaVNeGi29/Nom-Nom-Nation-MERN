@@ -5,8 +5,8 @@ export const StoreContext = createContext(null)
 
 const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({});
-    const url = "https://nom-nom-nation-mern-backend.onrender.com/";
-    const frontendUrl = "https://nom-nom-nation.onrender.com/";
+    const url = "https://nom-nom-nation-mern-backend.onrender.com";
+    const frontendUrl = "https://nom-nom-nation.onrender.com";
     const [token,setToken] = useState("");
     const [food_list,setFood_list] = useState([]);
 
@@ -14,11 +14,6 @@ const StoreContextProvider = (props) => {
         const response = await axios.get(url+"/api/food/list");
         setFood_list(response.data.data);
     } 
-
-    // const loadCartData = async (token) => {
-    //     const response = await axios.get(url+"/api/cart/get",{},{headers:{token}});
-    //     setCartItems(response.data.cartData);
-    // }
 
     const loadCartData = async (token) => {
         try {
