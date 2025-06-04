@@ -10,6 +10,8 @@ const PlaceOrder = () => {
 
   const {getTotalCartAmount,token,food_list,cartItems,url,frontendUrl} = useContext(StoreContext);
 
+  const [agreed, setAgreed] = useState(false);
+
   const [data,setData] = useState({
     firstName:"",
     lastName:"",
@@ -24,6 +26,23 @@ const PlaceOrder = () => {
 
   const placeOrder = async (e) => {
     e.preventDefault();
+
+    // if (!agreed) {
+    //   Toastify({
+    //     text: "You must agree to the terms and policies before proceeding.",
+    //     duration: 3000,
+    //     gravity: "top", // or "bottom"
+    //     position: "right", // or "left" or "center"
+    //     backgroundColor: "#ff4d4f",
+    //     close: true
+    //   }).showToast();
+    //   return;
+    // }
+
+    if (!agreed) {
+      alert("You must agree to the terms and policies before proceeding.");
+      return;
+    }
 
     let orderItems = [];
     food_list.forEach(item => {
@@ -142,7 +161,23 @@ const PlaceOrder = () => {
                 <p>${getTotalCartAmount()===0?0:getTotalCartAmount()+2}</p>
               </div>
             </div>
-            <button type='submit'>Proceed to Payment</button>
+            <div className="terms-agreement">
+              <input
+                type="checkbox"
+                id="agree"
+                checked={agreed}
+                onChange={() => setAgreed(!agreed)}
+              />
+              <label htmlFor="agree">
+                I agree to the{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/terms" target="_blank" rel="noreferrer">Terms & Conditions</a>,{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>,{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/refund" target="_blank" rel="noreferrer">Refund Policy</a>,{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/shipping" target="_blank" rel="noreferrer">Shipping Policy</a>, and{" "}
+              </label>
+            </div>
+            <button type='submit' disabled={!agreed}>Proceed to Payment</button>
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">Contact Us</a>.
           </div>
       </div>
     </form>

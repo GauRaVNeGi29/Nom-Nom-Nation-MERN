@@ -39,3 +39,18 @@
 .place-order .cart-total button{
     margin-top: 30px;
 }
+
+.terms-agreement {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.terms-agreement label {
+  margin-left: 0.5rem;
+  color: #444;
+}
+
+.terms-agreement a {
+  color: #007bff;
+  text-decoration: underline;
+}
