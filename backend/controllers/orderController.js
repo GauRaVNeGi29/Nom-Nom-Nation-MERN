@@ -12,7 +12,6 @@ async function placeOrder(req, res) {
 
     const {userId, items, amount, address} = req.body;
 
-    const frontend_url = "http://localhost:5173";
 
     try {
         const newOrder = new orderModel({
@@ -25,7 +24,7 @@ async function placeOrder(req, res) {
         await userModel.findByIdAndUpdate(req.body.userId, {cartData:{}});
 
         const options = {
-            amount: req.body.amount*100,
+            amount: req.body.amount*100*85,
             currency: "INR",
             receipt: `receipt_order_${newOrder._id}`,
         }
