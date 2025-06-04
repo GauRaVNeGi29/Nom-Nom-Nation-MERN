@@ -10,27 +10,28 @@ const razorpayInstance = new Razorpay({
 
 async function placeOrder(req, res) {
 
+    const {userId, items, amount, address} = req.body;
+
     const frontend_url = "http://localhost:5173";
 
     try {
         const newOrder = new orderModel({
-            userId: req.body.userId,
-            items: req.body.items,
-            amount: req.body.amount,
-            address: req.body.address,
+            userId,
+            items,
+            amount,
+            address
         })
         await newOrder.save();
         await userModel.findByIdAndUpdate(req.body.userId, {cartData:{}});
-        const razorpayOrder = await razorpayInstance.orders.create({
-            amount: amount*85,
+
+        const options = {
+            amount: req.body.amount*100,
             currency: "INR",
             receipt: `receipt_order_${newOrder._id}`,
-            notes: items.reduce((acc, item, idx) => {
-                acc[`item_${idx + 1}_name`] = item.name;
-                acc[`item_${idx + 1}_quantity`] = item.quantity || 1; // default 1 if no quantity
-                return acc;
-            }, {}),
-        });
+        }
+
+        const razorpayOrder = await razorpayInstance.orders.create(options);
+
         res.json({
             success: true,
             razorpayOrderId: razorpayOrder.id,

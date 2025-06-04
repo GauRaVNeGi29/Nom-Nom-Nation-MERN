@@ -1,20 +1,33 @@
-.verify{
-    min-height: 60vh;
-    display: grid;
+.verify {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
 }
 
-.verify .spinner{
-    width: 50px;
-    height: 50px;
-    place-self: center;
-    border: 5px solid #bdbdbd;
-    border-top-color: tomato;
-    border-radius: 50%;
-    animation: rotate 1s infinite;
+.verify .spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #bdbdbd;
+  border-top-color: tomato;
+  border-radius: 50%;
+  animation: rotate 1s infinite linear;
 }
 
-@keyframes rotate{
-    100%{
-        transform: rotate(360deg);
-    }
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.verify .message h2 {
+  margin-top: 20px;
+  font-size: 24px;
+  color: green;
+}
+
+.verify .message p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
 }

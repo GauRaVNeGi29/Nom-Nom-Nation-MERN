@@ -5,24 +5,6 @@ import axios from 'axios'
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    if (document.getElementById('razorpay-script')) {
-      resolve(true);
-      return;
-    }
-    const script = document.createElement('script');
-    script.id = 'razorpay-script';
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => {
-      resolve(true);
-    };
-    script.onerror = () => {
-      resolve(false);
-    };
-    document.body.appendChild(script);
-  });
-};
 
 const PlaceOrder = () => {
 
@@ -40,28 +22,8 @@ const PlaceOrder = () => {
     phone:""
   })
 
-  // const loadRazorpayScript = () => {
-  //   return new Promise((resolve) => {
-  //     const script = document.createElement("script");
-  //     script.src = "https://checkout.razorpay.com/v1/checkout.js";
-  //     script.onload = () => {
-  //       resolve(true);
-  //     };
-  //     script.onerror = () => {
-  //       resolve(false);
-  //     };
-  //     document.body.appendChild(script);
-  //   });
-  // };
-
   const placeOrder = async (e) => {
     e.preventDefault();
-
-    const res = await loadRazorpayScript();
-    if (!res) {
-      alert('Razorpay SDK failed to load. Are you online?');
-      return;
-    }
 
     let orderItems = [];
     food_list.forEach(item => {
@@ -97,7 +59,8 @@ const PlaceOrder = () => {
           description: "Test Transaction",
           order_id: razorpayOrderId,
           handler: async function (response) {
-            window.location.href = `${frontendUrl}/verify?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&orderId=${orderId}`;          },
+            window.location.href = `${frontendUrl}/verify?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&orderId=${orderId}`;
+          },
           prefill: {
             name: data.firstName + " " + data.lastName,
             email: data.email,

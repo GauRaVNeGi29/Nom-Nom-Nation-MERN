@@ -1,5 +1,5 @@
 .food-item{
-    width: 90%;
+    width: 100%;
     margin: auto;
     border: 1px solid;
     border-radius: 15px;
@@ -19,6 +19,7 @@
 }
 
 .food-item-name-rating{
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
