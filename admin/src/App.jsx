@@ -12,7 +12,7 @@ import Footer from './components/Footer/Footer'
 
 const App = () => {
 
-  const url = "https://nom-nom-nation-mern-backend.onrender.com/"
+  const url = "https://nom-nom-nation-mern-backend.onrender.com"
 
   return (
     <div className='app-wrapper'>
