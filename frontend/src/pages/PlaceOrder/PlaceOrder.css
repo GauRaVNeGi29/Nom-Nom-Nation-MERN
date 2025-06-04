@@ -58,3 +58,7 @@
   color: #007bff;
   text-decoration: underline;
 }
+.contact p{
+    font-size: 0.9rem;
+    color: #444;
+}
