@@ -179,9 +179,9 @@ const PlaceOrder = () => {
             <button type='submit'>Proceed to Payment</button>
             <div className="contact">
                 <p>
-                Feel free
-                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">contact Us</a>
-                for any queries.
+                Feel free{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">Contact Us</a>
+                {" "}for any queries.
                 </p> 
             </div>
           </div>
