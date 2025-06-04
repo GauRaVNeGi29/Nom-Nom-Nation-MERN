@@ -166,7 +166,6 @@ const PlaceOrder = () => {
                 required
                 type="checkbox"
                 id="agree"
-{/*                 checked={agreed} */}
                 onChange={() => setAgreed(!agreed)}
               />
               <label htmlFor="agree">
