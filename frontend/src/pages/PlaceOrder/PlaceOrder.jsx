@@ -27,18 +27,7 @@ const PlaceOrder = () => {
   const placeOrder = async (e) => {
     e.preventDefault();
 
-    // if (!agreed) {
-    //   Toastify({
-    //     text: "You must agree to the terms and policies before proceeding.",
-    //     duration: 3000,
-    //     gravity: "top", // or "bottom"
-    //     position: "right", // or "left" or "center"
-    //     backgroundColor: "#ff4d4f",
-    //     close: true
-    //   }).showToast();
-    //   return;
-    // }
-
+    
 
     let orderItems = [];
     food_list.forEach(item => {
@@ -161,14 +150,23 @@ const PlaceOrder = () => {
               <input
                 type="checkbox"
                 id="agree"
-                checked={agreed}
+                required
               />
               <label htmlFor="agree">
                 I agree to the{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/terms" target="_blank" rel="noreferrer">Terms & Conditions</a>,{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>,{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/shipping" target="_blank" rel="noreferrer">Shipping Policy</a>, and{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/refund" target="_blank" rel="noreferrer">Refund Policy</a>.
               </label>
+            </div>
+            <button type='submit'>Proceed to Payment</button>
+            <div className='contact'>
+              <p>
+                Feel free to{" "} 
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">Contact Us</a>
+                {" "} for any queries. 
+              </p>
             </div>
           </div>
       </div>
