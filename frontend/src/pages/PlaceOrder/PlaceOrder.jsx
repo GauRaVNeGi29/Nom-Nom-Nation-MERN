@@ -39,10 +39,10 @@ const PlaceOrder = () => {
     //   return;
     // }
 
-    if (!agreed) {
-      alert("You must agree to the terms and policies before proceeding.");
-      return;
-    }
+    // if (!agreed) {
+    //   alert("You must agree to the terms and policies before proceeding.");
+    //   return;
+    // }
 
     let orderItems = [];
     food_list.forEach(item => {
@@ -163,21 +163,22 @@ const PlaceOrder = () => {
             </div>
             <div className="terms-agreement">
               <input
+                required
                 type="checkbox"
                 id="agree"
-                checked={agreed}
+{/*                 checked={agreed} */}
                 onChange={() => setAgreed(!agreed)}
               />
               <label htmlFor="agree">
                 I agree to the{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/terms" target="_blank" rel="noreferrer">Terms & Conditions</a>,{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>,{" "}
-                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/refund" target="_blank" rel="noreferrer">Refund Policy</a>,{" "}
                 <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/shipping" target="_blank" rel="noreferrer">Shipping Policy</a>, and{" "}
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/refund" target="_blank" rel="noreferrer">Refund Policy</a>.
               </label>
             </div>
-            <button type='submit' disabled={!agreed}>Proceed to Payment</button>
-                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">Contact Us</a>.
+            <button type='submit'>Proceed to Payment</button>
+                <a href="https://merchant.razorpay.com/policy/QbWrS9sbQVZQWv/contact_us" target="_blank" rel="noreferrer">Contact Us</a>
           </div>
       </div>
     </form>
