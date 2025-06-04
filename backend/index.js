@@ -16,7 +16,10 @@ const PORT = process.env.PORT;
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "https://nom-nom-nation.onrender.com/", 
+  credentials: true,
+}));
 
 // DB Connection
 connectDB();
