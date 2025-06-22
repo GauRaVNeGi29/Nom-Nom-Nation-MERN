@@ -6,7 +6,8 @@
 
 ## 📸 Preview
 
-![Nom Nom Nation Screenshot](./preview.png) <!-- Add your screenshot image or remove this section if not available -->
+![image](https://github.com/user-attachments/assets/0d33f78d-8059-46f2-a83f-dd450df4147d)
+ <!-- Add your screenshot image or remove this section if not available -->
 
 ---
 
